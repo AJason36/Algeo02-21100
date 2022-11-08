@@ -4,7 +4,6 @@ import cv2
 import numpy
 import os
 import pickle
-import foo
 # Directory sekarang
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
