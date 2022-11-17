@@ -42,14 +42,16 @@ def computeMean():
 def diffMatrix(mean):
     global result
     diffMat = [[0.0 for j in range(len(result))] for i in range(len(mean))]
+    names = []
 
     itr = 0
     for key in result:
         for i in range(len(mean)):
             diffMat[i][itr] = result[key][i] - mean[i]
+        names += [key]
         itr += 1
 
-    return diffMat
+    return diffMat, names
 
 def transpose(mat):
     matTranspose = [[mat[j][i] for j in range(len(mat))] for i in range(len(mat[0]))]
@@ -150,7 +152,6 @@ def eigenFace(matCov, mat):
     # Menghitung nilai eigenface untuk seluruh gambar
     # nilai eigenface untuk gambar ke-i ada di kolom ke-i
     eigenFaceList = eigenVector @ mat
-    print(len(eigenVector), len(eigenVector[0]))
     return eigenVector, eigenFaceList
 
 
@@ -162,13 +163,25 @@ def tes(mat):
 if __name__ == "__main__":
     load(os.path.join(dir_path, 'features.pck'))
     mean = computeMean()
-    diffMat = diffMatrix(mean)
+    diffMat, names = diffMatrix(mean)
     covariance = numpy.array( multiply(transpose(diffMat), diffMat) )
     numpy.set_printoptions(4, suppress=True)
     # covariance = numpy.array([[0, 1], [-2, -3]])
     print(covariance)
     print("Hasil perhitungan sendiri:")
     eigenVector, eigenFaceList = eigenFace(covariance, numpy.array(diffMat))
+
+    # Memasukkan hasil perhitungan ke eigenData.pck
+    eigenData = {}
+    eigenData['__eigenVector'] = eigenVector
+    eigenData['__mean'] = mean
+    eigenFaceList = transpose(eigenFaceList)
+    for i in range(len(eigenFaceList)):
+        eigenData[names[i]] = eigenFaceList[i]
+    with open(os.path.join(dir_path, 'eigenData.pck'), 'wb') as fp:
+        pickle.dump(eigenData, fp)
+
+    # Tes dengan library bawaan
     # print("Hasil perhitungan numpy:")
     # tes(covariance)
     
