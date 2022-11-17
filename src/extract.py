@@ -4,11 +4,12 @@ import cv2
 import numpy
 import os
 import pickle
-# Directory sekarang
-dir_path = os.path.dirname(os.path.realpath(__file__))
+
 
 def extract_features(imgPath, vector_size = 32):
     img = cv2.imread(imgPath)
+    img = cv2.resize(img, (256, 256))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     try:
         alg = cv2.KAZE_create()
         kps = alg.detect(img)
@@ -22,6 +23,7 @@ def extract_features(imgPath, vector_size = 32):
         print('Error: ', e)
         return None
     return dsc
+
 
 def batch_extractor(images_path, pickled_db_path="features.pck"):
     files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
@@ -40,6 +42,18 @@ def batch_extractor(images_path, pickled_db_path="features.pck"):
     with open(pickled_db_path, 'wb') as fp:
         pickle.dump(result, fp)
 
-batch_extractor(os.path.join(dir_path, '../test'), os.path.join(dir_path, '../src/features.pck'))
+
+def extractNewImage(namaFileGambar):
+    # Directory sekarang
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    return extract_features(os.path.join(dir_path, f'{namaFileGambar}'))
+
+
+if __name__ == "__main__":
+    # Directory sekarang
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    # Membuat features.pck
+    batch_extractor(os.path.join(dir_path, '../test'), os.path.join(dir_path, '../src/features.pck'))
 
 
