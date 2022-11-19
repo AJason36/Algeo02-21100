@@ -11,11 +11,12 @@ def extract_features(imgPath, vector_size = 32):
     img = cv2.resize(img, (256, 256))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     try:
-        alg = cv2.KAZE_create()
-        kps = alg.detect(img)
-        kps = sorted(kps, key=lambda x: -x.response)[:vector_size]
-        kps, dsc = alg.compute(img, kps)
-        dsc = dsc.flatten()
+        # alg = cv2.KAZE_create()
+        # kps = alg.detect(img)
+        # kps = sorted(kps, key=lambda x: -x.response)[:vector_size]
+        # kps, dsc = alg.compute(img, kps)
+        # dsc = dsc.flatten()
+        dsc = img.flatten()
         needed_size = 64 * vector_size
         if dsc.size < needed_size:
             dsc = numpy.concatenate([dsc, numpy.zeros(needed_size - dsc.size)])

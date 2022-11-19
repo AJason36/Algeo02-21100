@@ -32,7 +32,10 @@ def computeMean():
     total = []
     cnt = 0
     for key in result:
-        total = addMtx(total, result[key])
+        if cnt == 0:
+            total = numpy.array(result[key])
+        else:
+            total = numpy.add(total, result[key])
         cnt += 1
     mean = []
     for val in total:
@@ -48,7 +51,7 @@ def diffMatrix(mean):
     for key in result:
         for i in range(len(mean)):
             diffMat[i][itr] = result[key][i] - mean[i]
-        names += [key]
+        names += [key[5:]]
         itr += 1
 
     return diffMat, names
@@ -124,7 +127,7 @@ def eigenFace(matCov, mat):
     n = len(matCov)
     mt = numpy.copy(matCov)
     evec = numpy.eye(len(matCov))
-
+    print('A')
     # Loop QR Decomposition to approximate eigenvalues
     for x in range(1000):
         s = mt[n-1][n-1]
@@ -134,7 +137,7 @@ def eigenFace(matCov, mat):
         mt = R @ Q
         mt = numpy.add(mt, smult)
         evec = evec @ Q
-
+    print('B')
     # Mencari K eigenvectors yang bersesuaian dengan K eigenvalues terbesar
     eigenPairs = []
     for i in range(len(mt)):
@@ -142,7 +145,7 @@ def eigenFace(matCov, mat):
         for j in range(len(evec[i])):
             eigenPairs[i] += [evec[i][j]]
     eigenPairs.sort(key=takeFirst, reverse=True)
-
+    print('C')
     eigenVector = []
     for i in range(min(K, len(eigenPairs))):
         eigenVector += [eigenPairs[i][1:]]
@@ -166,8 +169,7 @@ if __name__ == "__main__":
     diffMat, names = diffMatrix(mean)
     covariance = numpy.array( multiply(transpose(diffMat), diffMat) )
     numpy.set_printoptions(4, suppress=True)
-    # covariance = numpy.array([[0, 1], [-2, -3]])
-    print(covariance)
+    # print(covariance)
     print("Hasil perhitungan sendiri:")
     eigenVector, eigenFaceList = eigenFace(covariance, numpy.array(diffMat))
 

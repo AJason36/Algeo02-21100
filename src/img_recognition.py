@@ -75,11 +75,12 @@ def imgRecognition(namaFile):
                 if temp < minED:
                     namaED = lhs
                     minED = temp
-            # print(lhs, euclideanDistance(eFace, rhs))
+            print(lhs, euclideanDistance(eFace, rhs))
 
     return namaED
 
 
 if __name__ == "__main__":
-    print(imgRecognition("../test/Emma Watson60_2012.jpg"))
+    #print(imgRecognition("../test/Emma Watson60_2012.jpg"))
+    print(imgRecognition("../test/Alex Lawther22_84.jpg"))
     print(imgRecognition("EmmaTest2.jpg"))
