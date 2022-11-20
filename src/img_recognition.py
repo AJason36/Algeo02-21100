@@ -75,7 +75,7 @@ def imgRecognition(namaFile):
                 if temp < minED:
                     namaED = lhs
                     minED = temp
-            # print(lhs, euclideanDistance(eFace, rhs))
+            print(lhs, euclideanDistance(eFace, rhs))
 
     return namaED
 

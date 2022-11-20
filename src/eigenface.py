@@ -44,7 +44,7 @@ def diffMatrix(mean):
     for key in result:
         for i in range(len(mean)):
             diffMat[i][itr] = result[key][i] - mean[i]
-        names += [key]
+        names += [key[5:]]
         itr += 1
 
     return diffMat, names
@@ -120,7 +120,7 @@ def eigenFace(matCov, mat):
     n = len(matCov)
     mt = numpy.copy(matCov)
     evec = numpy.eye(len(matCov))
-
+    print('A')
     # Loop QR Decomposition to approximate eigenvalues
     for x in range(1000):
         s = mt[n-1][n-1]
@@ -142,7 +142,7 @@ def eigenFace(matCov, mat):
         for j in range(len(evec[i])):
             eigenPairs[i] += [evec[i][j]]
     eigenPairs.sort(key=takeFirst, reverse=True)
-
+    print('C')
     eigenVector = []
     for i in range(min(K, len(eigenPairs))):
         eigenVector += [eigenPairs[i][1:]]
