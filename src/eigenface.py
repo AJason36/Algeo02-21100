@@ -44,7 +44,7 @@ def diffMatrix(mean):
     for key in result:
         for i in range(len(mean)):
             diffMat[i][itr] = result[key][i] - mean[i]
-        names += [key[5:]]
+        names += [key[9:]]
         itr += 1
 
     return diffMat, names
@@ -146,14 +146,13 @@ def eigenFace(matCov, mat):
     eigenVector = []
     for i in range(min(K, len(eigenPairs))):
         eigenVector += [eigenPairs[i][1:]]
+    # eigenVector = numpy.transpose(eigenVector)
+    print('eigenVector dimension = ', len(eigenVector), 'x', len(eigenVector[0]))
     for i in range(len(eigenVector)):
         eigenVector[i] = mat @ eigenVector[i]
     # eigenVector = numpy.transpose(eigenVector)
     
-    # Transpose eigenvector sehingga tiap kolom adalah vector
-    # eigenVector = numpy.transpose(eigenVector)
-    print('eigenVector dimension = ', len(eigenVector), 'x', len(eigenVector[0]))
-    print('mat dimension = ', len(mat), 'x', len(mat[0]))
+    # print('mat dimension = ', len(mat), 'x', len(mat[0]))
     # mat = numpy.transpose(mat)
     
     # Menghitung nilai eigenface untuk seluruh gambar
