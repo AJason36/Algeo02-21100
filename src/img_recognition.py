@@ -24,7 +24,11 @@ def newEigenFace(eigenData, imageData):
 
 
 def normalizeVec(vec):
-    norm = np.linalg.norm(vec)
+    norm = 0
+
+    for i in range(len(vec)):
+        norm += vec[i] ** 2
+    norm = math.sqrt(norm)
 
     if norm == 0:
         return vec
@@ -33,10 +37,6 @@ def normalizeVec(vec):
 
 def euclideanDistance(newEigenFace, comparedEigenFace):
     ret = 0
-
-    # print(newEigenFace[0] - comparedEigenFace[0])
-    # print(newEigenFace[0][0])
-    # print(comparedEigenFace[0])
 
     newEigenFace = normalizeVec(np.transpose(newEigenFace)[0])
     comparedEigenFace = normalizeVec(comparedEigenFace)
@@ -75,11 +75,11 @@ def imgRecognition(namaFile):
                 if temp < minED:
                     namaED = lhs
                     minED = temp
-            print(lhs, euclideanDistance(eFace, rhs))
+            # print(lhs, euclideanDistance(eFace, rhs))
 
     return namaED
 
 
 if __name__ == "__main__":
-    print(imgRecognition("../test/training/Emma Watson60_2012.jpg"))
+    print(imgRecognition("../test/training/EmmaWatson_1.jpg"))
     print(imgRecognition("../test/example/EmmaTest2.jpg"))
