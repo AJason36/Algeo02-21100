@@ -7,8 +7,9 @@ import pickle
 
 
 def extract_features(imgPath, vector_size = 32):
+    imgSize = 256
     img = cv2.imread(imgPath)
-    img = cv2.resize(img, (256, 256))
+    img = cv2.resize(img, (imgSize, imgSize))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     try:
         # alg = cv2.KAZE_create()
@@ -30,7 +31,7 @@ def batch_extractor(images_path, pickled_db_path="features.pck"):
     files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
 
     result = {}
-    maxCnt = 5
+    maxCnt = 120
     for f in files:
         print('Extracting features from image %s' % f)
         name = f.split('/')[-1].lower()
