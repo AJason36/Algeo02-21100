@@ -120,7 +120,7 @@ def eigenFace(matCov, mat):
     n = len(matCov)
     mt = numpy.copy(matCov)
     evec = numpy.eye(len(matCov))
-    print('A')
+
     # Loop QR Decomposition to approximate eigenvalues
     for x in range(1000):
         s = mt[n-1][n-1]
@@ -130,10 +130,10 @@ def eigenFace(matCov, mat):
         mt = R @ Q
         mt = numpy.add(mt, smult)
         evec = evec @ Q
-    for i in range(len(mt)):
-        print(mt[i][i], end=' ')
-    print()
-    print(evec)
+
+    # Transpose eigenvector sementara supaya tiap baris menjadi satu vector
+    evec = numpy.transpose(evec)
+    print('evec dimension = ', len(evec), 'x', len(evec[0]))
 
     # Mencari K eigenvectors yang bersesuaian dengan K eigenvalues terbesar
     eigenPairs = []
@@ -142,12 +142,19 @@ def eigenFace(matCov, mat):
         for j in range(len(evec[i])):
             eigenPairs[i] += [evec[i][j]]
     eigenPairs.sort(key=takeFirst, reverse=True)
-    print('C')
+
     eigenVector = []
     for i in range(min(K, len(eigenPairs))):
         eigenVector += [eigenPairs[i][1:]]
     for i in range(len(eigenVector)):
         eigenVector[i] = mat @ eigenVector[i]
+    # eigenVector = numpy.transpose(eigenVector)
+    
+    # Transpose eigenvector sehingga tiap kolom adalah vector
+    # eigenVector = numpy.transpose(eigenVector)
+    print('eigenVector dimension = ', len(eigenVector), 'x', len(eigenVector[0]))
+    print('mat dimension = ', len(mat), 'x', len(mat[0]))
+    # mat = numpy.transpose(mat)
     
     # Menghitung nilai eigenface untuk seluruh gambar
     # nilai eigenface untuk gambar ke-i ada di kolom ke-i
@@ -170,14 +177,16 @@ if __name__ == "__main__":
 
     # Menghitung matrix covariance
     print('Computing covariance...')
+    
     mean = computeMean()
     diffMat, names = diffMatrix(mean)
     covariance = numpy.array( multiply(transpose(diffMat), diffMat) )
     print('Finished computing covariance')
 
     # Menghitung eigenFace
+    print('Computing eigenface...')
     eigenVector, eigenFaceList = eigenFace(covariance, numpy.array(diffMat))
-    print('Finished eigenFace')
+    print('Finished eigenface')
 
     # Memasukkan hasil perhitungan ke eigenData.pck
     eigenData = {}
@@ -190,7 +199,7 @@ if __name__ == "__main__":
         pickle.dump(eigenData, fp)
 
     # Tes dengan library bawaan
-    print("Hasil perhitungan numpy:")
-    tes(covariance)
+    # print("Hasil perhitungan numpy:")
+    # tes(covariance)
     
 

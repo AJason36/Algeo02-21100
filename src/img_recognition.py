@@ -16,7 +16,7 @@ def newEigenFace(eigenData, imageData):
     eVec = np.array(eigenData["__eigenVector"])
 
     imageData = np.transpose(np.array([imageData]))
-
+    
     ret = np.subtract(imageData, mean)
     ret = eVec @ ret
 
@@ -81,5 +81,6 @@ def imgRecognition(namaFile):
 
 
 if __name__ == "__main__":
-    print(imgRecognition("../test/training/Emma Watson60_2012.jpg"))
+    print(imgRecognition("../test/training/EmmaWatson_1.jpg"))
+    print(imgRecognition("../test/example/Avriltest.webp"))
     print(imgRecognition("../test/example/EmmaTest2.jpg"))
