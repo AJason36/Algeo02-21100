@@ -20,22 +20,15 @@ def load(dbPath):
             result = pickle.load(fp)
         LOADED = True
 
-def addMtx(total, add):
-    if(len(total) == 0):
-        return add
-    for i in range(len(total)):
-        total[i] += add[i]
-    return total
-
 def computeMean():
     global result
     total = []
     cnt = 0
-    for key in result:
+    for key, val in result.items():
         if cnt == 0:
-            total = numpy.array(result[key])
+            total = val
         else:
-            total = numpy.add(total, result[key])
+            total = numpy.add(total, val)
         cnt += 1
     mean = []
     for val in total:
@@ -120,8 +113,8 @@ def cek(mat, x):
         return False
 
 # Sumber : https://www.andreinc.net/2021/01/25/computing-eigenvalues-and-eigenvectors-using-qr-decomposition
-# NMAX = 20
-# MAT_TEST = [[i + 2*j for j in range(NMAX)] for i in range(NMAX)]
+# Menghitung eigen face
+# Mengembalikan eigenVector dan eigenFaceList
 def eigenFace(matCov, mat):
     K = 200 # Jumlah eigenvector yang akan diambil
     n = len(matCov)
@@ -137,7 +130,11 @@ def eigenFace(matCov, mat):
         mt = R @ Q
         mt = numpy.add(mt, smult)
         evec = evec @ Q
-    print('B')
+    for i in range(len(mt)):
+        print(mt[i][i], end=' ')
+    print()
+    print(evec)
+
     # Mencari K eigenvectors yang bersesuaian dengan K eigenvalues terbesar
     eigenPairs = []
     for i in range(len(mt)):
@@ -157,21 +154,30 @@ def eigenFace(matCov, mat):
     eigenFaceList = eigenVector @ mat
     return eigenVector, eigenFaceList
 
-
+# Pengecekan dengan library bawaan
 def tes(mat):
     w, v = numpy.linalg.eig(numpy.array(mat))
     print(w)
     print(v)
 
 if __name__ == "__main__":
+    numpy.set_printoptions(4, suppress=True)
+
+    # Load file berisi hasil extract gambar
+    print('Loading features.pck...')
     load(os.path.join(dir_path, 'features.pck'))
+    print("features.pck loaded successfully!")
+
+    # Menghitung matrix covariance
+    print('Computing covariance...')
     mean = computeMean()
     diffMat, names = diffMatrix(mean)
     covariance = numpy.array( multiply(transpose(diffMat), diffMat) )
-    numpy.set_printoptions(4, suppress=True)
-    # print(covariance)
-    print("Hasil perhitungan sendiri:")
+    print('Finished computing covariance')
+
+    # Menghitung eigenFace
     eigenVector, eigenFaceList = eigenFace(covariance, numpy.array(diffMat))
+    print('Finished eigenFace')
 
     # Memasukkan hasil perhitungan ke eigenData.pck
     eigenData = {}
@@ -184,7 +190,7 @@ if __name__ == "__main__":
         pickle.dump(eigenData, fp)
 
     # Tes dengan library bawaan
-    # print("Hasil perhitungan numpy:")
-    # tes(covariance)
+    print("Hasil perhitungan numpy:")
+    tes(covariance)
     
 

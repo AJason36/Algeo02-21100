@@ -81,6 +81,5 @@ def imgRecognition(namaFile):
 
 
 if __name__ == "__main__":
-    #print(imgRecognition("../test/Emma Watson60_2012.jpg"))
-    print(imgRecognition("../test/Alex Lawther22_84.jpg"))
-    print(imgRecognition("EmmaTest2.jpg"))
+    print(imgRecognition("../test/training/Emma Watson60_2012.jpg"))
+    print(imgRecognition("../test/example/EmmaTest2.jpg"))

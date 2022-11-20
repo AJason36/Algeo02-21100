@@ -30,7 +30,7 @@ def batch_extractor(images_path, pickled_db_path="features.pck"):
     files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
 
     result = {}
-    maxCnt = 120
+    maxCnt = 5
     for f in files:
         print('Extracting features from image %s' % f)
         name = f.split('/')[-1].lower()
@@ -55,6 +55,6 @@ if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))
 
     # Membuat features.pck
-    batch_extractor(os.path.join(dir_path, '../test'), os.path.join(dir_path, '../src/features.pck'))
+    batch_extractor(os.path.join(dir_path, '../test/training'), os.path.join(dir_path, '../src/features.pck'))
 
 
