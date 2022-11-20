@@ -31,5 +31,5 @@ def writeNewTrainingImage(filepath, img):
 
 if __name__ == "__main__":
     currDir = os.path.dirname(os.path.realpath(__file__))
-    img = cv2.imread(os.path.join(currDir, "EmmaTest.jpg"))
-    writeNewTrainingImage(os.path.join(currDir, "../newtest"), img)
+    img = cv2.imread(os.path.join(currDir, "../test/example/EmmaTest.jpg"))
+    writeNewTrainingImage(os.path.join(currDir, "../test/training"), img)
