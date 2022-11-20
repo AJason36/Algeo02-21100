@@ -133,7 +133,7 @@ def eigenFace(matCov, mat):
 
     # Transpose eigenvector sementara supaya tiap baris menjadi satu vector
     evec = numpy.transpose(evec)
-    print('evec dimension = ', len(evec), 'x', len(evec[0]))
+    # print('evec dimension = ', len(evec), 'x', len(evec[0]))
 
     # Mencari K eigenvectors yang bersesuaian dengan K eigenvalues terbesar
     eigenPairs = []
@@ -147,7 +147,7 @@ def eigenFace(matCov, mat):
     for i in range(min(K, len(eigenPairs))):
         eigenVector += [eigenPairs[i][1:]]
     # eigenVector = numpy.transpose(eigenVector)
-    print('eigenVector dimension = ', len(eigenVector), 'x', len(eigenVector[0]))
+    # print('eigenVector dimension = ', len(eigenVector), 'x', len(eigenVector[0]))
     for i in range(len(eigenVector)):
         eigenVector[i] = mat @ eigenVector[i]
     # eigenVector = numpy.transpose(eigenVector)
@@ -166,7 +166,7 @@ def tes(mat):
     print(w)
     print(v)
 
-if __name__ == "__main__":
+def main():
     numpy.set_printoptions(4, suppress=True)
 
     # Load file berisi hasil extract gambar
@@ -202,3 +202,6 @@ if __name__ == "__main__":
     # tes(covariance)
     
 
+if __name__ == "__main__":
+    main()
+    

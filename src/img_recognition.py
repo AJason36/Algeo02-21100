@@ -32,7 +32,7 @@ def normalizeVec(vec):
 
     if norm == 0:
         return vec
-    return vec / norm
+    return np.divide(vec, norm)
 
 
 def euclideanDistance(newEigenFace, comparedEigenFace):
@@ -77,7 +77,15 @@ def imgRecognition(namaFile):
                     minED = temp
             # print(lhs, euclideanDistance(eFace, rhs))
 
-    return namaED, minED
+    EPS1 = 0.05
+    EPS2 = 0.20
+    if minED < EPS1:
+        return f"Mirip dengan {namaED} dengan tingkat kemiripan {100 * (1-minED)}%"
+    elif minED < EPS2:
+        return "Muka tidak dikenali pada dataset"
+    else:
+        return "Gambar tidak dikenali"
+
 
 
 if __name__ == "__main__":
