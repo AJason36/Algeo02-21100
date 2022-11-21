@@ -9,6 +9,7 @@ import pickle
 def extract_features(imgPath, vector_size = 32):
     imgSize = 256
     img = cv2.imread(imgPath)
+    img = cropImage(img)
     img = cv2.resize(img, (imgSize, imgSize))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     try:
@@ -51,13 +52,6 @@ def extractNewImage(namaFileGambar):
     return extract_features(os.path.join(dir_path, f'{namaFileGambar}'))
 
 
-if __name__ == "__main__":
-    # Directory sekarang
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-
-    # Membuat features.pck
-    batch_extractor(os.path.join(dir_path, '../test/training'), os.path.join(dir_path, '../src/features.pck'))
-
 def extract_folder(path):
     # Directory sekarang
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -65,3 +59,30 @@ def extract_folder(path):
     # Membuat features.pck
     batch_extractor(path, os.path.join(dir_path, '../src/features.pck'))
     
+
+def cropImage(img):
+    # Source : https://www.geeksforgeeks.org/cropping-faces-from-images-using-opencv-python/
+    
+    # Convert into grayscale
+    grayscaleImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # Load the cascade
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
+    
+    # Detect faces
+    faces = face_cascade.detectMultiScale(grayscaleImg, 1.1, 4)
+    
+    # Draw rectangle around the faces and crop the faces
+    for (x, y, w, h) in faces:
+        cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
+        faces = img[y:y + h, x:x + w]
+
+    return faces
+
+
+if __name__ == "__main__":
+    # Directory sekarang
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    # Membuat features.pck
+    batch_extractor(os.path.join(dir_path, '../test/training'), os.path.join(dir_path, '../src/features.pck'))
