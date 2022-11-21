@@ -80,11 +80,12 @@ def imgRecognition(namaFile):
     EPS1 = 0.05
     EPS2 = 0.20
     if minED < EPS1:
-        return f"Mirip dengan {namaED} dengan tingkat kemiripan {100 * (1-minED)}%"
+        var = 100 * (1-minED)
+        return f"Mirip dengan {namaED}\n dengan tingkat kemiripan {round(var,2)}%", True, namaED
     elif minED < EPS2:
-        return "Muka tidak dikenali pada dataset"
+        return "Muka tidak dikenali pada dataset", False, namaED
     else:
-        return "Gambar tidak dikenali"
+        return "Gambar tidak dikenali", False, namaED
 
 
 

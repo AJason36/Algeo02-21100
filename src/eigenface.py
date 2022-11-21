@@ -44,7 +44,7 @@ def diffMatrix(mean):
     for key in result:
         for i in range(len(mean)):
             diffMat[i][itr] = result[key][i] - mean[i]
-        names += [key[9:]]
+        names += [key]
         itr += 1
 
     return diffMat, names
