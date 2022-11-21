@@ -2,7 +2,7 @@ import os
 import tkinter as tk
 import tkinter.messagebox
 import customtkinter as ctk
-import sys
+import camera
 from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog as fd
@@ -14,6 +14,8 @@ import img_recognition
 import extract
 from pathlib import Path 
 import time 
+from extract import cropImage
+import cv2
 
 ctk.set_appearance_mode("System")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
@@ -57,7 +59,7 @@ class App(ctk.CTk):
 
         self.frame_input = ctk.CTkFrame(master = self.frame_mid, width=200, height=300, corner_radius=10)
         self.frame_res =  ctk.CTkFrame(master = self.frame_mid,  width=200, height=300, corner_radius=10)
-        self.frame_button_test = ctk.CTkFrame(master = self.frame_mid, width=20, height=10, corner_radius=0, fg_color='#3B3B3B')
+        self.frame_button = ctk.CTkFrame(master = self.frame_mid, width=20, height=10, corner_radius=0, fg_color='#3B3B3B')
         self.frame_title_test = ctk.CTkFrame(master = self.frame_mid, width=20, height=10, corner_radius=0, fg_color='#3B3B3B')
         self.frame_button_res = ctk.CTkFrame(master = self.frame_mid, width=20, height=10, corner_radius=0, fg_color='#3B3B3B')
         self.frame_title_res = ctk.CTkFrame(master = self.frame_mid, width=20, height=10, corner_radius=0, fg_color='#3B3B3B')
@@ -66,7 +68,7 @@ class App(ctk.CTk):
         self.frame_time = ctk.CTkFrame(master = self.frame_bot, width=20, height=10, corner_radius=0, fg_color='#545454')
 
         self.frame_input.grid(row=0,column=0, sticky='nsew', padx=10, pady=(2,0))
-        self.frame_button_test.grid(row=1,column=0, sticky='nsew', padx=10, pady=0)
+        self.frame_button.grid(row=1,column=0, sticky='nsew', padx=10, pady=0)
         self.frame_title_test.grid(row=2,column=0, sticky='nsew', padx=10, pady=0)
         self.frame_res.grid(row=0,column=2, sticky='nsew', padx=10, pady=(2,0))
         self.frame_button_res.grid(row=1,column=2, sticky='nsew', padx=10, pady=0)
@@ -75,6 +77,13 @@ class App(ctk.CTk):
         self.frame_execution.grid(row=0,column=0, sticky='nsew', padx=10, pady=(10,0))
         self.frame_time.grid(row=1,column=0, sticky='nsew', padx=20, pady=0)
         
+        self.frame_button.columnconfigure(0,weight=1)
+        self.frame_button.columnconfigure(1,weight=1)
+
+        self.frame_button_test = ctk.CTkFrame(master = self.frame_button, width=20, height=10, corner_radius=0, fg_color='#3B3B3B')
+        self.frame_button_cam = ctk.CTkFrame(master = self.frame_button, width=20, height=10, corner_radius=0, fg_color='#3B3B3B')
+        self.frame_button_test.grid(row=1,column=0, sticky='nsew', padx=10, pady=0)
+        self.frame_button_cam.grid(row=1,column=1, sticky='nsew', padx=10, pady=0)
         # print image kosong
         self.insert_button = ctk.CTkButton(master=self, text = 'Insert Image',width=20,command=self.insert_img)
 
@@ -115,8 +124,10 @@ class App(ctk.CTk):
 
         # set up button
         self.label_top.grid(row=0,column=0,padx=10,pady=2)
-        self.insert_button = ctk.CTkButton(master=self.frame_mid, text = 'Insert Image',text_font = ("Cordia",12),width=100,height=40,command=self.insert_img)
-        self.insert_button.grid(row=1, column=0,padx=10)
+        self.insert_button = ctk.CTkButton(master=self.frame_button, text = 'Insert Image',text_font = ("Cordia",12),width=50,height=40,command=self.insert_img)
+        self.insert_button.grid(row=1, column=0,padx=10,pady=5)
+        self.insert_button = ctk.CTkButton(master=self.frame_button, text = 'Open Cam',text_font = ("Cordia",12),width=50,height=40,command=self.open_cam)
+        self.insert_button.grid(row=1, column=1,padx=10,pady=5)
 
         self.insert_folder = ctk.CTkButton(master=self.frame_mid, text = 'Insert Folder',text_font = ("Cordia",12),width=100,height=40,command=self.insert_folder)
         self.insert_folder.grid(row=1, column=2,padx=10)
@@ -150,7 +161,15 @@ class App(ctk.CTk):
         
         # self.labelimg=ctk.CTkLabel(master=self,image=self.imgtk)
         # self.labelimg.pack(padx=10,pady=10)
-    
+    def open_cam(self):
+        cap = cv2.VideoCapture(0)
+        _, frame = cap.read()
+        cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+        self.img = Image.fromarray(cv2image)
+        self.imgtk = ImageTk.PhotoImage(image=self.img)
+        self.label_input.configure(image=self.imgtk)
+        self.label_input.after(1, self.open_cam)
+
     def insert_folder(self):
         self.folder = fd.askdirectory()
         extract.extract_folder(self.folder)
