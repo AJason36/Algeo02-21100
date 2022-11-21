@@ -3,6 +3,7 @@ import os
 import math
 import extract
 import numpy as np
+from qr_decomposition import normaVektor
 
 
 def loadImage(namaFileGambar):
@@ -65,26 +66,28 @@ def imgRecognition(namaFile):
     # Mencari Gambar dengan Euclidean Distance terkecil
     minED = -1
     namaED = "NULL"
+    sim = 0
 
     for lhs, rhs in eData.items():
         if lhs != "__mean" and lhs != "__eigenVector":
             if minED == -1:
                 namaED = lhs
                 minED = euclideanDistance(eFace, rhs)
+                sim = np.dot(eFace, rhs) / ( normaVektor(eFace) * normaVektor(rhs) )
             else:
                 temp = euclideanDistance(eFace, rhs)
 
                 if temp < minED:
                     namaED = lhs
                     minED = temp
+                    sim = np.dot(eFace, rhs) / ( normaVektor(eFace) * normaVektor(rhs) )
             # print(lhs, euclideanDistance(eFace, rhs))
 
-    EPS1 = 10000.0
-    EPS2 = 1e6
-    if minED < EPS1:
-        var = 100 * (1-minED)
-        return f"Mirip dengan {namaED}\n dengan jarak {round(minED,3)}", True, namaED
-    elif minED < EPS2:
+    EPS1 = 0.98
+    EPS2 = 0.85
+    if sim > EPS1:
+        return f"Mirip dengan {namaED}\n jarak = {round(minED,3)}\n kemiripan = {sim}", True, namaED
+    elif sim > EPS2:
         return "Muka tidak dikenali pada dataset", False, namaED
     else:
         return "Gambar tidak dikenali", False, namaED
