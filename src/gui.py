@@ -175,7 +175,7 @@ class App(ctk.CTk):
         self.imgtk = ImageTk.PhotoImage(image=self.img)
         self.label_input.configure(image=self.imgtk)
         
-        if (int(time.time() - self.startCamTime) == 5):
+        if (int(time.time() - self.startCamTime) == 3):
             start_time = time.time()
             self.dir = os.path.dirname(os.path.realpath(__file__))
             cv2.imwrite(os.path.join(self.dir, "../test/example/test.jpg"), frame)
@@ -183,13 +183,14 @@ class App(ctk.CTk):
             self.label_bot.configure(text =f'Execution Time: {round(time.time() - start_time,2)} second')
             self.label_text_res.configure(text = msg)
             self.label_text_res.configure(text = msg)
-            # if isRecognized:
-            #     temp = Path(fileName).name
-            #     self.dirTemp = os.path.join(self.folder, temp)
-            #     self.img2 = Image.open(self.dirTemp)
-            #     self.img_resized = self.img2.resize((600,500))
-            #     self.imgtk2 = ImageTk.PhotoImage(self.img_resized)
-            #     self.label_res.configure(image = self.imgtk2)
+
+            if isRecognized:
+                temp = Path(fileName).name
+                self.dirTemp = os.path.join(self.folder, temp)
+                self.img2 = Image.open(self.dirTemp)
+                self.img_resized = self.img2.resize((600,500))
+                self.imgtk2 = ImageTk.PhotoImage(self.img_resized)
+                self.label_res.configure(image = self.imgtk2)
 
         self.label_input.after(1, self.open_cam)
 
