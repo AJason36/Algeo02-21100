@@ -26,18 +26,6 @@ def newEigenFace(eigenData, imageData):
     return ret
 
 
-def normalizeVec(vec):
-    norm = 0
-
-    for i in range(len(vec)):
-        norm += vec[i] ** 2
-    norm = math.sqrt(norm)
-
-    if norm == 0:
-        return vec
-    return np.divide(vec, norm)
-
-
 def euclideanDistance(newEigenFace, comparedEigenFace):
     ret = 0
 
@@ -91,7 +79,6 @@ def imgRecognition(namaFile):
         return "Muka tidak dikenali pada dataset", False, namaED
     else:
         return "Gambar tidak dikenali", False, namaED
-
 
 
 if __name__ == "__main__":

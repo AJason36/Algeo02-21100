@@ -2,7 +2,6 @@ import os
 import tkinter as tk
 import tkinter.messagebox
 import customtkinter as ctk
-import camera
 from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog as fd

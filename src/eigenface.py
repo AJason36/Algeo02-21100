@@ -6,23 +6,22 @@ import time
 import numpy
 import numpy.linalg
 
-import img_recognition
 import qr_decomposition
 
 # Directory sekarang
 dir_path = os.path.dirname(os.path.realpath(__file__))
-LOADED = False
 result = {}
+
 
 def takeFirst(elem):
     return elem[0]
 
+
 def load(dbPath):
-    global LOADED, result
-    if not LOADED:
-        with open(dbPath, 'rb') as fp:
-            result = pickle.load(fp)
-        LOADED = True
+    global result
+    with open(dbPath, 'rb') as fp:
+        result = pickle.load(fp)
+
 
 def computeMean():
     global result
@@ -39,6 +38,7 @@ def computeMean():
         mean.append(val / cnt)
     return mean
 
+
 def diffMatrix(mean):
     global result
     diffMat = [[0.0 for j in range(len(result))] for i in range(len(mean))]
@@ -53,29 +53,21 @@ def diffMatrix(mean):
 
     return diffMat, names
 
-def transpose(mat):
-    matTranspose = [[mat[j][i] for j in range(len(mat))] for i in range(len(mat[0]))]
-    return matTranspose
-
-def multiply(mat1, mat2):
-    assert(len(mat1[0]) == len(mat2))
-    ret = [[0.0 for j in range(len(mat2[0]))] for i in range(len(mat1))]
-    if len(mat1[0]) != len(mat2):
-        print('Cannot Multiply!')
-        return None
-    
-    for i in range(len(mat1)):
-        for j in range(len(mat2[0])):
-            for k in range(len(mat2)):
-                ret[i][j] += mat1[i][k] * mat2[k][j]
-    
-    return ret
 
 def normaVektor(vec):
     ret = 0.0
     for x in vec:
         ret += x * x
     return math.sqrt(ret)
+
+
+def normalizeVec(vec):
+    norm = normaVektor(vec)
+
+    if norm == 0:
+        return vec
+    return numpy.divide(vec, norm)
+
 
 # Sumber : https://www.andreinc.net/2021/01/25/computing-eigenvalues-and-eigenvectors-using-qr-decomposition
 # Menghitung eigen face
@@ -101,7 +93,6 @@ def eigenFace(matCov, mat, useBuiltIn = False):
 
     # Transpose eigenvector sementara supaya tiap baris menjadi satu vector
     evec = numpy.transpose(evec)
-    # print('evec dimension = ', len(evec), 'x', len(evec[0]))
 
     # Mencari K eigenvectors yang bersesuaian dengan K eigenvalues terbesar
     eigenPairs = []
@@ -116,7 +107,7 @@ def eigenFace(matCov, mat, useBuiltIn = False):
         eigenVector += [eigenPairs[i][1:]]
     for i in range(len(eigenVector)):
         eigenVector[i] = mat @ eigenVector[i]
-        eigenVector[i] = img_recognition.normalizeVec(eigenVector[i])
+        eigenVector[i] = normalizeVec(eigenVector[i])
     
     mat = numpy.transpose(mat)
     
@@ -129,11 +120,6 @@ def eigenFace(matCov, mat, useBuiltIn = False):
             eigenFaceList[i][j] = numpy.dot(mat[i], eigenVector[j])
     return eigenVector, eigenFaceList
 
-# Pengecekan dengan library bawaan
-def tes(mat):
-    w, v = numpy.linalg.eig(numpy.array(mat))
-    print(w)
-    print(v)
 
 def main():
     numpy.set_printoptions(4, suppress=True)
@@ -171,10 +157,6 @@ def main():
         eigenData[names[i]] = eigenFaceList[i]
     with open(os.path.join(dir_path, 'eigenData.pck'), 'wb') as fp:
         pickle.dump(eigenData, fp)
-
-    # Tes dengan library bawaan
-    # print("Hasil perhitungan numpy:")
-    # tes(covariance)
     
 
 if __name__ == "__main__":
