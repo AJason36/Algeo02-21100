@@ -126,7 +126,7 @@ class App(ctk.CTk):
         self.label_top.grid(row=0,column=0,padx=10,pady=2)
         self.insert_button = ctk.CTkButton(master=self.frame_button, text = 'Insert Image',text_font = ("Cordia",12),width=50,height=40,command=self.insert_img)
         self.insert_button.grid(row=1, column=0,padx=10,pady=5)
-        self.insert_button = ctk.CTkButton(master=self.frame_button, text = 'Open Cam',text_font = ("Cordia",12),width=50,height=40,command=self.open_cam)
+        self.insert_button = ctk.CTkButton(master=self.frame_button, text = 'Open Cam',text_font = ("Cordia",12),width=50,height=40,command=self.init_cam)
         self.insert_button.grid(row=1, column=1,padx=10,pady=5)
 
         self.insert_folder = ctk.CTkButton(master=self.frame_mid, text = 'Insert Folder',text_font = ("Cordia",12),width=100,height=40,command=self.insert_folder)
@@ -161,13 +161,36 @@ class App(ctk.CTk):
         
         # self.labelimg=ctk.CTkLabel(master=self,image=self.imgtk)
         # self.labelimg.pack(padx=10,pady=10)
+    
+
+    def init_cam(self):
+        self.cap = cv2.VideoCapture(0)
+        self.startCamTime = time.time()
+        self.open_cam()
+
     def open_cam(self):
-        cap = cv2.VideoCapture(0)
-        _, frame = cap.read()
+        _, frame = self.cap.read()
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         self.img = Image.fromarray(cv2image)
         self.imgtk = ImageTk.PhotoImage(image=self.img)
         self.label_input.configure(image=self.imgtk)
+        
+        if (int(time.time() - self.startCamTime) == 5):
+            start_time = time.time()
+            self.dir = os.path.dirname(os.path.realpath(__file__))
+            cv2.imwrite(os.path.join(self.dir, "../test/example/test.jpg"), frame)
+            msg, isRecognized, fileName = img_recognition.imgRecognition(os.path.join(self.dir, "../test/example/test.jpg"))
+            self.label_bot.configure(text =f'Execution Time: {round(time.time() - start_time,2)} second')
+            self.label_text_res.configure(text = msg)
+            self.label_text_res.configure(text = msg)
+            # if isRecognized:
+            #     temp = Path(fileName).name
+            #     self.dirTemp = os.path.join(self.folder, temp)
+            #     self.img2 = Image.open(self.dirTemp)
+            #     self.img_resized = self.img2.resize((600,500))
+            #     self.imgtk2 = ImageTk.PhotoImage(self.img_resized)
+            #     self.label_res.configure(image = self.imgtk2)
+
         self.label_input.after(1, self.open_cam)
 
     def insert_folder(self):
