@@ -10,7 +10,7 @@ def videoCam():
 
     # Menginisialisasi Video
     cap = cv2.VideoCapture(0)
-    scaling_factor = 1.5
+    # scaling_factor = 1.5
     start = time.time()
 
     # Menginisialisasi Arr of Captured Frame
@@ -22,7 +22,7 @@ def videoCam():
         ret, frame = cap.read()
         
         # Meresize Frame
-        frame = cv2.resize(frame, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
+        # frame = cv2.resize(frame, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
     
         # Menampilkan isi Frame
         cv2.imshow('Webcam', frame)
@@ -35,7 +35,7 @@ def videoCam():
         # Mengecek apakah sudah 15 detik
         end = time.time()
 
-        if (int(end - start) == 1):
+        if (int(end - start) == 15):
             frame = cropImage(frame)
             cv2.imwrite(os.path.join(dir_path, "Hehe.png"), frame)
             arr += [frame]
