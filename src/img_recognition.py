@@ -12,13 +12,15 @@ def loadImage(namaFileGambar):
 
 def newEigenFace(eigenData, imageData):
     # Mengambil Data
-    mean = np.transpose(np.array([eigenData["__mean"]]))
+    mean = np.array(eigenData["__mean"])
     eVec = np.array(eigenData["__eigenVector"])
 
-    imageData = np.transpose(np.array([imageData]))
+    imageData = np.array(imageData)
     
-    ret = np.subtract(imageData, mean)
-    ret = eVec @ ret
+    diff = np.subtract(imageData, mean)
+    ret = []
+    for i in range(len(eVec)):
+        ret += [np.dot(diff, eVec[i])]
 
     return ret
 
@@ -38,8 +40,8 @@ def normalizeVec(vec):
 def euclideanDistance(newEigenFace, comparedEigenFace):
     ret = 0
 
-    newEigenFace = normalizeVec(np.transpose(newEigenFace)[0])
-    comparedEigenFace = normalizeVec(comparedEigenFace)
+    # newEigenFace = normalizeVec(newEigenFace)
+    # comparedEigenFace = normalizeVec(comparedEigenFace)
 
     for i in range(len(newEigenFace)):
         ret += (newEigenFace[i] - comparedEigenFace[i]) ** 2
@@ -77,11 +79,11 @@ def imgRecognition(namaFile):
                     minED = temp
             # print(lhs, euclideanDistance(eFace, rhs))
 
-    EPS1 = 0.05
-    EPS2 = 0.20
+    EPS1 = 10000.0
+    EPS2 = 1e6
     if minED < EPS1:
         var = 100 * (1-minED)
-        return f"Mirip dengan {namaED}\n dengan tingkat kemiripan {round(var,2)}%", True, namaED
+        return f"Mirip dengan {namaED}\n dengan jarak {round(minED,3)}", True, namaED
     elif minED < EPS2:
         return "Muka tidak dikenali pada dataset", False, namaED
     else:

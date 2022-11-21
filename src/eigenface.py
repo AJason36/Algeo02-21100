@@ -5,6 +5,8 @@ import math
 import numpy
 import numpy.linalg
 
+import img_recognition
+
 # Directory sekarang
 dir_path = os.path.dirname(os.path.realpath(__file__))
 LOADED = False
@@ -116,7 +118,7 @@ def cek(mat, x):
 # Menghitung eigen face
 # Mengembalikan eigenVector dan eigenFaceList
 def eigenFace(matCov, mat):
-    K = 200 # Jumlah eigenvector yang akan diambil
+    K = 20 # Jumlah eigenvector yang akan diambil
     n = len(matCov)
     mt = numpy.copy(matCov)
     evec = numpy.eye(len(matCov))
@@ -146,18 +148,19 @@ def eigenFace(matCov, mat):
     eigenVector = []
     for i in range(min(K, len(eigenPairs))):
         eigenVector += [eigenPairs[i][1:]]
-    # eigenVector = numpy.transpose(eigenVector)
-    # print('eigenVector dimension = ', len(eigenVector), 'x', len(eigenVector[0]))
     for i in range(len(eigenVector)):
         eigenVector[i] = mat @ eigenVector[i]
-    # eigenVector = numpy.transpose(eigenVector)
+        eigenVector[i] = img_recognition.normalizeVec(eigenVector[i])
     
-    # print('mat dimension = ', len(mat), 'x', len(mat[0]))
-    # mat = numpy.transpose(mat)
+    mat = numpy.transpose(mat)
+    
     
     # Menghitung nilai eigenface untuk seluruh gambar
     # nilai eigenface untuk gambar ke-i ada di kolom ke-i
-    eigenFaceList = eigenVector @ mat
+    eigenFaceList = [[0 for j in range(len(eigenVector))] for i in range(len(mat))]
+    for i in range(len(mat)):
+        for j in range(len(eigenVector)):
+            eigenFaceList[i][j] = numpy.dot(mat[i], eigenVector[j])
     return eigenVector, eigenFaceList
 
 # Pengecekan dengan library bawaan
@@ -175,11 +178,11 @@ def main():
     print("features.pck loaded successfully!")
 
     # Menghitung matrix covariance
-    print('Computing covariance...')
-    
+    print('Computing difference matrix...')
     mean = computeMean()
     diffMat, names = diffMatrix(mean)
-    covariance = numpy.array( multiply(transpose(diffMat), diffMat) )
+    print('Computing covariance...')
+    covariance = numpy.transpose(diffMat) @ numpy.array(diffMat)
     print('Finished computing covariance')
 
     # Menghitung eigenFace
@@ -191,7 +194,6 @@ def main():
     eigenData = {}
     eigenData['__eigenVector'] = eigenVector
     eigenData['__mean'] = mean
-    eigenFaceList = transpose(eigenFaceList)
     for i in range(len(eigenFaceList)):
         eigenData[names[i]] = eigenFaceList[i]
     with open(os.path.join(dir_path, 'eigenData.pck'), 'wb') as fp:

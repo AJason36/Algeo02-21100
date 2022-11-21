@@ -63,11 +63,14 @@ def extract_folder(path):
 def cropImage(img):
     # Source : https://www.geeksforgeeks.org/cropping-faces-from-images-using-opencv-python/
     
+    # Directory sekarang
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
     # Convert into grayscale
     grayscaleImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
     # Load the cascade
-    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
+    face_cascade = cv2.CascadeClassifier(os.path.join(dir_path, 'haarcascade_frontalface_alt2.xml'))
     
     # Detect faces
     faces = face_cascade.detectMultiScale(grayscaleImg, 1.1, 4)
