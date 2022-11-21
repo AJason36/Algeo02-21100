@@ -1,6 +1,7 @@
 import os
 import pickle
 import math
+import time
 
 import numpy
 import numpy.linalg
@@ -78,8 +79,9 @@ def normaVektor(vec):
 def householder(mat):
     # I.S. mat matriks persegi
     assert(len(mat) == len(mat[0]))
+
     Q = numpy.eye(len(mat))
-    matT = transpose(mat)
+    matT = numpy.transpose(mat)
     for i in range(len(mat) - 1):
         u = matT[i]
         for j in range(i):
@@ -91,44 +93,38 @@ def householder(mat):
         norm = normaVektor(u)
         for j in range(len(u)):
             u[j] /= norm
-        Hi = multiply(transpose([u]), [u])
+        Hi = numpy.transpose([u]) @ [u]
         for j in range(len(Hi)):
             for k in range(len(Hi)):
                 Hi[j][k] *= -2
             Hi[j][j] += 1
-        mat = multiply(Hi, mat)
-        matT = transpose(mat)
+        mat = Hi @ mat
+        matT = numpy.transpose(mat)
         if i == 0:
             Q = Hi
         else:
-            Q = multiply(Q, Hi)
+            Q = Q @ Hi
 
     return numpy.array(Q), numpy.array(mat)
-
-def cek(mat, x):
-    EPS = 1e-10
-    m = numpy.copy(mat)
-    m = numpy.subtract(m, x * numpy.eye(len(m)))
-    if(abs(numpy.linalg.det(m)) < EPS):
-        return True
-    else:
-        return False
 
 # Sumber : https://www.andreinc.net/2021/01/25/computing-eigenvalues-and-eigenvectors-using-qr-decomposition
 # Menghitung eigen face
 # Mengembalikan eigenVector dan eigenFaceList
-def eigenFace(matCov, mat):
+def eigenFace(matCov, mat, useBuiltIn = False):
     K = 20 # Jumlah eigenvector yang akan diambil
     n = len(matCov)
     mt = numpy.copy(matCov)
     evec = numpy.eye(len(matCov))
 
     # Loop QR Decomposition to approximate eigenvalues
-    for x in range(1000):
+    ones = numpy.eye(n)
+    for x in range(200):
         s = mt[n-1][n-1]
-        smult = s * numpy.eye(n)
-        #Q, R = householder(numpy.subtract(mt, smult))
-        Q, R = numpy.linalg.qr(numpy.subtract(mt, smult))
+        smult = s * ones
+        if useBuiltIn:
+            Q, R = numpy.linalg.qr(numpy.subtract(mt, smult))
+        else:
+            Q, R = householder(numpy.subtract(mt, smult))
         mt = R @ Q
         mt = numpy.add(mt, smult)
         evec = evec @ Q
@@ -174,21 +170,28 @@ def main():
 
     # Load file berisi hasil extract gambar
     print('Loading features.pck...')
+    start_time = time.time()
     load(os.path.join(dir_path, 'features.pck'))
-    print("features.pck loaded successfully!")
+    end_time = time.time()
+    print(f"features.pck loaded successfully in {round(end_time - start_time, 2)} seconds!")
 
     # Menghitung matrix covariance
     print('Computing difference matrix...')
     mean = computeMean()
     diffMat, names = diffMatrix(mean)
+    print('Finished computing difference matrix')
     print('Computing covariance...')
+    start_time = time.time()
     covariance = numpy.transpose(diffMat) @ numpy.array(diffMat)
-    print('Finished computing covariance')
+    end_time = time.time()
+    print(f'Finished computing covariance in {round(end_time - start_time, 2)} seconds')
 
     # Menghitung eigenFace
     print('Computing eigenface...')
+    start_time = time.time()
     eigenVector, eigenFaceList = eigenFace(covariance, numpy.array(diffMat))
-    print('Finished eigenface')
+    end_time = time.time()
+    print(f'Finished eigenface in {round(end_time-start_time,2)} seconds')
 
     # Memasukkan hasil perhitungan ke eigenData.pck
     eigenData = {}
