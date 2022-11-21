@@ -175,7 +175,7 @@ class App(ctk.CTk):
         self.imgtk = ImageTk.PhotoImage(image=self.img)
         self.label_input.configure(image=self.imgtk)
         
-        if (int(time.time() - self.startCamTime) == 3):
+        if (int(time.time() - self.startCamTime) == 15):
             start_time = time.time()
             self.dir = os.path.dirname(os.path.realpath(__file__))
             cv2.imwrite(os.path.join(self.dir, "../test/example/test.jpg"), frame)
@@ -191,6 +191,8 @@ class App(ctk.CTk):
                 self.img_resized = self.img2.resize((600,500))
                 self.imgtk2 = ImageTk.PhotoImage(self.img_resized)
                 self.label_res.configure(image = self.imgtk2)
+            
+            self.startCamTime = time.time()
 
         self.label_input.after(1, self.open_cam)
 
