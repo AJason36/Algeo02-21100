@@ -84,9 +84,9 @@ def imgRecognition(namaFile):
             # print(lhs, euclideanDistance(eFace, rhs))
 
     EPS1 = 0.98
-    EPS2 = 0.85
+    EPS2 = 0.90
     if sim > EPS1:
-        return f"Mirip dengan {namaED}\n jarak = {round(minED,3)}\n kemiripan = {sim}", True, namaED
+        return f"Mirip dengan {namaED}\n jarak = {round(minED,3)}\n kemiripan = {round(sim*100, 2)}%", True, namaED
     elif sim > EPS2:
         return "Muka tidak dikenali pada dataset", False, namaED
     else:
