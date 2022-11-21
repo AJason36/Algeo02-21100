@@ -7,6 +7,7 @@ import numpy
 import numpy.linalg
 
 import img_recognition
+import qr_decomposition
 
 # Directory sekarang
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -76,37 +77,6 @@ def normaVektor(vec):
         ret += x * x
     return math.sqrt(ret)
 
-def householder(mat):
-    # I.S. mat matriks persegi
-    assert(len(mat) == len(mat[0]))
-
-    Q = numpy.eye(len(mat))
-    matT = numpy.transpose(mat)
-    for i in range(len(mat) - 1):
-        u = matT[i]
-        for j in range(i):
-            u[j] = 0
-        if(mat[0][0] > 0):
-            u[i] += normaVektor(u)
-        else:
-            u[i] -= normaVektor(u)
-        norm = normaVektor(u)
-        for j in range(len(u)):
-            u[j] /= norm
-        Hi = numpy.transpose([u]) @ [u]
-        for j in range(len(Hi)):
-            for k in range(len(Hi)):
-                Hi[j][k] *= -2
-            Hi[j][j] += 1
-        mat = Hi @ mat
-        matT = numpy.transpose(mat)
-        if i == 0:
-            Q = Hi
-        else:
-            Q = Q @ Hi
-
-    return numpy.array(Q), numpy.array(mat)
-
 # Sumber : https://www.andreinc.net/2021/01/25/computing-eigenvalues-and-eigenvectors-using-qr-decomposition
 # Menghitung eigen face
 # Mengembalikan eigenVector dan eigenFaceList
@@ -118,13 +88,13 @@ def eigenFace(matCov, mat, useBuiltIn = False):
 
     # Loop QR Decomposition to approximate eigenvalues
     ones = numpy.eye(n)
-    for x in range(200):
+    for x in range(1000):
         s = mt[n-1][n-1]
         smult = s * ones
         if useBuiltIn:
             Q, R = numpy.linalg.qr(numpy.subtract(mt, smult))
         else:
-            Q, R = householder(numpy.subtract(mt, smult))
+            Q, R = qr_decomposition.householder(numpy.subtract(mt, smult))
         mt = R @ Q
         mt = numpy.add(mt, smult)
         evec = evec @ Q
