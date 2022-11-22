@@ -107,8 +107,8 @@ class App(ctk.CTk):
         
         self.label_input.place(relx =0.0,rely=0.0, anchor=tkinter.N)
         self.label_top.place(relx=0.5,rely=0.5,anchor=CENTER)
-        self.label_top.grid(row=0,column=1,padx=5,pady=2, sticky='new')
 
+        self.label_top.grid(row=0,column=1,padx=5,pady=2, sticky='new')
         self.label_input.grid(row=0, column=0,padx=0,pady=2)
         self.label_res.grid(row=0, column=2,padx=0,pady=2)
         self.label_tes.grid(row=2, column=0,padx=0,pady=0)
@@ -120,7 +120,6 @@ class App(ctk.CTk):
         self.label_top.place(relx=0.5,rely=0.5,anchor=E)
         self.label_time.grid(row=1, column=0,padx=5,pady=2,sticky='w')
         
-
         # set up button
         self.label_top.grid(row=0,column=0,padx=10,pady=2)
         self.insert_button = ctk.CTkButton(master=self.frame_button, text = 'Insert Image',text_font = ("Cordia",12),width=50,height=40,command=self.insert_img)
@@ -132,10 +131,7 @@ class App(ctk.CTk):
         self.insert_folder.grid(row=1, column=2,padx=10)
 
     def insert_img(self):        
-        # self.frame_top = ctk.CTkFrame(self, width=600,height=400, corner_radius=10, bg="#292929")
-        # self.frame_top.pack(padx=20,pady=20)
-        # ftypes = [('Jpg Files','*.jpg'),('Png Files','*.png')]
-        # filetypes=ftypes
+        #open file
         self.filename = fd.askopenfilename()
         self.label_text_tes.configure(text = Path(self.filename).name)
         self.dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), self.filename)
@@ -144,6 +140,7 @@ class App(ctk.CTk):
         self.imgtk1 = ImageTk.PhotoImage(self.img_resized)
         self.label_input = ctk.CTkLabel(master = self.frame_mid, image = self.imgtk1)
         self.label_input.grid(row=0, column=0,padx=0,pady=2)
+        #processing image input
         start_time = time.time()
         msg, isRecognized, fileName = img_recognition.imgRecognition(self.dir)
         self.label_bot.configure(text =f'Execution Time: {round(time.time()-start_time,2)} second')
@@ -156,7 +153,15 @@ class App(ctk.CTk):
             self.img_resized = self.img2.resize((600,500))
             self.imgtk2 =ImageTk.PhotoImage(self.img_resized)
             self.label_res.configure(image = self.imgtk2)
-
+        else:
+            self.file1 = 'unidentified.png'
+            self.folder1 = 'img'
+            # Open dan show image
+            self.dir1 = os.path.join(os.path.dirname(os.path.realpath(__file__)), os.path.join(self.folder1, self.file1))
+            self.img = Image.open(self.dir1)
+            self.img_resized = self.img.resize((300,400))
+            self.imgtk1 = ImageTk.PhotoImage(self.img_resized)
+            self.label_res.configure(image = self.imgtk1)
         
         # self.labelimg=ctk.CTkLabel(master=self,image=self.imgtk)
         # self.labelimg.pack(padx=10,pady=10)
@@ -178,6 +183,7 @@ class App(ctk.CTk):
             start_time = time.time()
             self.dir = os.path.dirname(os.path.realpath(__file__))
             cv2.imwrite(os.path.join(self.dir, "../test/example/test.jpg"), frame)
+            self.label_text_tes.configure(text = 'test.jpg')
             msg, isRecognized, fileName = img_recognition.imgRecognition(os.path.join(self.dir, "../test/example/test.jpg"))
             self.label_bot.configure(text =f'Execution Time: {round(time.time() - start_time,2)} second')
             self.label_text_res.configure(text = msg)
@@ -190,7 +196,15 @@ class App(ctk.CTk):
                 self.img_resized = self.img2.resize((600,500))
                 self.imgtk2 = ImageTk.PhotoImage(self.img_resized)
                 self.label_res.configure(image = self.imgtk2)
-            
+            else:
+                self.file1 = 'unidentified.png'
+                self.folder1 = 'img'
+                # Open dan show image
+                self.dir1 = os.path.join(os.path.dirname(os.path.realpath(__file__)), os.path.join(self.folder1, self.file1))
+                self.img = Image.open(self.dir1)
+                self.img_resized = self.img.resize((300,400))
+                self.imgtk1 = ImageTk.PhotoImage(self.img_resized)
+                self.label_res.configure(image = self.imgtk1)
             self.startCamTime = time.time()
 
         self.label_input.after(1, self.open_cam)
