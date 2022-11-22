@@ -70,8 +70,8 @@ def imgRecognition(namaFile):
                     sim = np.dot(eFace, rhs) / ( normaVektor(eFace) * normaVektor(rhs) )
             # print(lhs, euclideanDistance(eFace, rhs))
 
-    EPS1 = 0.97
-    EPS2 = 0.95
+    EPS1 = 0.96
+    EPS2 = 0.93
     if sim > EPS1:
         return f"Mirip dengan {namaED}\njarak = {round(minED,3)}\nkemiripan = {round(sim*100, 2)}%", True, namaED
     elif sim > EPS2:

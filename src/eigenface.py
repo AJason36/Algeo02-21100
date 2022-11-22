@@ -71,7 +71,7 @@ def normalizeVec(vec):
 # Menghitung eigen face
 # Mengembalikan eigenVector dan eigenFaceList
 def eigenFace(matCov, mat, useBuiltIn = False):
-    K = 20 # Jumlah eigenvector yang akan diambil
+    K = 60 # Jumlah eigenvector yang akan diambil
     n = len(matCov)
     mt = numpy.copy(matCov)
     evec = numpy.eye(len(matCov))
