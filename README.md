@@ -6,7 +6,6 @@
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Usage](#usage)
-* [Room for Improvement](#room-for-improvement)
 * [Programming Language Used](#programming-language-used)
 * [Contact](#contact)
 
@@ -30,20 +29,17 @@ List the ready features here:
 
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
+![screenshot](![image](https://user-images.githubusercontent.com/88670080/203374836-c8a7851c-145c-4a14-ba5a-da3e9083b36f.png))
 
 ## Usage
-run gui.py file
+run main.py file
 
-`python gui.py`
+`python main.py`
 or 
-`py gui.py`
+`py main.py`
 
-## Room for Improvement
-Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
+then insert dataset folder, then compare image from file or camera
+
 
 ## Programming Language Used
 - Python
