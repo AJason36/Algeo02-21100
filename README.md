@@ -29,7 +29,7 @@ List the ready features here:
 
 
 ## Screenshots
-(![image](https://user-images.githubusercontent.com/88670080/203374836-c8a7851c-145c-4a14-ba5a-da3e9083b36f.png)
+![image](https://user-images.githubusercontent.com/88670080/203374836-c8a7851c-145c-4a14-ba5a-da3e9083b36f.png)
 
 ## Usage
 run main.py file
