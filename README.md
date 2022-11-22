@@ -38,7 +38,7 @@ run gui.py file
 
 `python gui.py`
 or 
-'py gui.py'
+`py gui.py`
 
 ## Room for Improvement
 Room for improvement:
