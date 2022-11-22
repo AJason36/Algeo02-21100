@@ -76,9 +76,9 @@ def imgRecognition(namaFile):
 
     EPS1 = 0.98
     EPS2 = 0.95
-    if minED < EPS1:
+    if sim > EPS1:
         return f"Mirip dengan {namaED}\njarak = {round(minED,3)}\nkemiripan = {round(sim*100, 2)}%", True, namaED
-    elif minED < EPS2:
+    elif sim > EPS2:
         return "Muka tidak dikenali pada dataset", False, namaED
     else:
         return "Gambar tidak dikenali", False, namaED
@@ -89,6 +89,5 @@ if __name__ == "__main__":
     print(imgRecognition("../test/example/Avriltest.webp"))
     print(imgRecognition("../test/example/EmmaTest2.jpg"))
     print(imgRecognition("../test/example/AlvaroTest.jpg"))
-    print(imgRecognition("../test/example/DogTest.jpg"))
     print(imgRecognition("../test/example/PizzaTest.jpg"))
 
