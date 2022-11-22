@@ -158,8 +158,8 @@ class App(ctk.CTk):
             self.dir1 = os.path.join(os.path.dirname(os.path.realpath(__file__)), os.path.join(self.folder1, self.file1))
             self.img = Image.open(self.dir1)
             self.img_resized = self.img.resize((300,400))
-            self.imgtk1 = ImageTk.PhotoImage(self.img_resized)
-            self.label_res.configure(image = self.imgtk1)
+            self.imgtk2 = ImageTk.PhotoImage(self.img_resized)
+            self.label_res.configure(image = self.imgtk2)
 
     def init_cam(self):
         self.cap = cv2.VideoCapture(0)
@@ -173,14 +173,13 @@ class App(ctk.CTk):
         self.imgtk = ImageTk.PhotoImage(image=self.img)
         self.label_input.configure(image=self.imgtk)
         
-        if (int(time.time() - self.startCamTime) == 10):
+        if (int(time.time() - self.startCamTime) == 5):
             start_time = time.time()
             self.dir = os.path.dirname(os.path.realpath(__file__))
             cv2.imwrite(os.path.join(self.dir, "../test/example/test.jpg"), frame)
             self.label_text_tes.configure(text = 'test.jpg')
             msg, isRecognized, fileName = img_recognition.imgRecognition(os.path.join(self.dir, "../test/example/test.jpg"))
             self.label_bot.configure(text =f'Execution Time: {round(time.time() - start_time,2)} second')
-            self.label_text_res.configure(text = msg)
             self.label_text_res.configure(text = msg)
             
             if isRecognized:
@@ -197,16 +196,19 @@ class App(ctk.CTk):
                 self.dir1 = os.path.join(os.path.dirname(os.path.realpath(__file__)), os.path.join(self.folder1, self.file1))
                 self.img = Image.open(self.dir1)
                 self.img_resized = self.img.resize((300,400))
-                self.imgtk1 = ImageTk.PhotoImage(self.img_resized)
-                self.label_res.configure(image = self.imgtk1)
+                self.imgtk2 = ImageTk.PhotoImage(self.img_resized)
+                self.label_res.configure(image = self.imgtk2)
             self.cap.release()
         else:
             self.label_input.after(1, self.open_cam)
 
     def insert_folder(self):
         self.folder = fd.askdirectory()
+        self.label_text_res.configure(text = 'Processing Eigen')
         extract.extract_folder(self.folder)
         eigenface.main()
+        self.label_text_res.configure(text = 'Completed')
+
 
     def on_close(self, event=0):
         self.destroy()
