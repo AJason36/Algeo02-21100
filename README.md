@@ -7,7 +7,7 @@
 * [Screenshots](#screenshots)
 * [Usage](#usage)
 * [Room for Improvement](#room-for-improvement)
-* [Acknowledgements](#acknowledgements)
+* [Programming Language Used](#programming-language-used)
 * [Contact](#contact)
 
 
@@ -36,7 +36,9 @@ List the ready features here:
 ## Usage
 run gui.py file
 
-`write-your-code-here`
+`python gui.py`
+or 
+'py gui.py'
 
 ## Room for Improvement
 Room for improvement:
