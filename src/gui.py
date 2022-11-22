@@ -199,9 +199,9 @@ class App(ctk.CTk):
                 self.img_resized = self.img.resize((300,400))
                 self.imgtk1 = ImageTk.PhotoImage(self.img_resized)
                 self.label_res.configure(image = self.imgtk1)
-            self.startCamTime = time.time()
-
-        self.label_input.after(1, self.open_cam)
+            self.cap.release()
+        else:
+            self.label_input.after(1, self.open_cam)
 
     def insert_folder(self):
         self.folder = fd.askdirectory()
