@@ -22,7 +22,7 @@ ctk.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Face Algorithm M")
+        self.title("Face Matching Algorithm")
         self.geometry("1000x600")
         self.protocol("WM_DELETE_WINDOW",self.on_close)
         self.folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../test/training")
@@ -42,8 +42,6 @@ class App(ctk.CTk):
         self.frame_bot.grid(row=2,column=0, sticky='nsew')
 
         self.frame_top.columnconfigure(0,weight=1)
-        # self.frame_top.columnconfigure(1,weight=1)
-        # self.frame_top.columnconfigure(2,weight=1)
 
         self.frame_mid.columnconfigure(0, weight=4)
         self.frame_mid.columnconfigure(1, weight=1)
@@ -131,15 +129,15 @@ class App(ctk.CTk):
         self.insert_folder.grid(row=1, column=2,padx=10)
 
     def insert_img(self):        
-        #open file
+        # open file
         self.filename = fd.askopenfilename()
         self.label_text_tes.configure(text = Path(self.filename).name)
         self.dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), self.filename)
+
         self.img2 = Image.open(self.dir)
         self.img_resized = self.img2.resize((600,500))
         self.imgtk1 = ImageTk.PhotoImage(self.img_resized)
-        self.label_input = ctk.CTkLabel(master = self.frame_mid, image = self.imgtk1)
-        self.label_input.grid(row=0, column=0,padx=0,pady=2)
+        self.label_input.configure(image = self.imgtk1)
         #processing image input
         start_time = time.time()
         msg, isRecognized, fileName = img_recognition.imgRecognition(self.dir)
@@ -148,7 +146,7 @@ class App(ctk.CTk):
         self.label_text_res.configure(text = msg)
         if isRecognized:
             temp = Path(fileName).name
-            self.dirTemp =os.path.join(self.folder, temp)
+            self.dirTemp = os.path.join(self.folder, temp)
             self.img2 = Image.open(self.dirTemp)
             self.img_resized = self.img2.resize((600,500))
             self.imgtk2 =ImageTk.PhotoImage(self.img_resized)
@@ -162,10 +160,6 @@ class App(ctk.CTk):
             self.img_resized = self.img.resize((300,400))
             self.imgtk1 = ImageTk.PhotoImage(self.img_resized)
             self.label_res.configure(image = self.imgtk1)
-        
-        # self.labelimg=ctk.CTkLabel(master=self,image=self.imgtk)
-        # self.labelimg.pack(padx=10,pady=10)
-    
 
     def init_cam(self):
         self.cap = cv2.VideoCapture(0)
@@ -179,7 +173,7 @@ class App(ctk.CTk):
         self.imgtk = ImageTk.PhotoImage(image=self.img)
         self.label_input.configure(image=self.imgtk)
         
-        if (int(time.time() - self.startCamTime) == 15):
+        if (int(time.time() - self.startCamTime) == 10):
             start_time = time.time()
             self.dir = os.path.dirname(os.path.realpath(__file__))
             cv2.imwrite(os.path.join(self.dir, "../test/example/test.jpg"), frame)
@@ -188,14 +182,14 @@ class App(ctk.CTk):
             self.label_bot.configure(text =f'Execution Time: {round(time.time() - start_time,2)} second')
             self.label_text_res.configure(text = msg)
             self.label_text_res.configure(text = msg)
-
+            
             if isRecognized:
                 temp = Path(fileName).name
                 self.dirTemp = os.path.join(self.folder, temp)
                 self.img2 = Image.open(self.dirTemp)
                 self.img_resized = self.img2.resize((600,500))
-                self.imgtk2 = ImageTk.PhotoImage(self.img_resized)
-                self.label_res.configure(image = self.imgtk2)
+                self.imgtest = ImageTk.PhotoImage(self.img_resized)
+                self.label_res.configure(image = self.imgtest)
             else:
                 self.file1 = 'unidentified.png'
                 self.folder1 = 'img'
@@ -213,7 +207,6 @@ class App(ctk.CTk):
         self.folder = fd.askdirectory()
         extract.extract_folder(self.folder)
         eigenface.main()
-        print(self.folder)
 
     def on_close(self, event=0):
         self.destroy()
