@@ -36,6 +36,8 @@ def batch_extractor(images_path, pickled_db_path="features.pck"):
     for f in files:
         name = f.split('/')[-1].lower()
         result[name] = extract_features(f)
+        if len(result[name]) == 0:
+            result.pop(name)
         maxCnt -= 1
         if maxCnt == 0:
             break
