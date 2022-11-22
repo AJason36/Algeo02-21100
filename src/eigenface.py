@@ -14,16 +14,19 @@ result = {}
 
 
 def takeFirst(elem):
+    # Mengambil elemen pertama dari list untuk sorting.
     return elem[0]
 
 
 def load(dbPath):
+    # Load file .pck berisi hasil extract training image
     global result
     with open(dbPath, 'rb') as fp:
         result = pickle.load(fp)
 
 
 def computeMean():
+    # Mengembalikan matriks 1 * n^2 berisi rata-rata training image
     global result
     total = []
     cnt = 0
@@ -40,6 +43,7 @@ def computeMean():
 
 
 def diffMatrix(mean):
+    # Mengembalikan matriks selisih dengan rata-rata
     global result
     diffMat = [[0.0 for j in range(len(result))] for i in range(len(mean))]
     names = []
@@ -54,15 +58,9 @@ def diffMatrix(mean):
     return diffMat, names
 
 
-def normaVektor(vec):
-    ret = 0.0
-    for x in vec:
-        ret += x * x
-    return math.sqrt(ret)
-
-
 def normalizeVec(vec):
-    norm = normaVektor(vec)
+    # Mengembalikan vektor satuan (normalized vector)
+    norm = qr_decomposition.normaVektor(vec)
 
     if norm == 0:
         return vec

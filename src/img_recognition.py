@@ -27,15 +27,11 @@ def newEigenFace(eigenData, imageData):
 
 
 def euclideanDistance(newEigenFace, comparedEigenFace):
+    # Return euclidean distance of two vectors
     ret = 0
-
-    # newEigenFace = normalizeVec(newEigenFace)
-    # comparedEigenFace = normalizeVec(comparedEigenFace)
 
     for i in range(len(newEigenFace)):
         ret += (newEigenFace[i] - comparedEigenFace[i]) ** 2
-
-    # print(ret)
 
     return math.sqrt(ret)
 

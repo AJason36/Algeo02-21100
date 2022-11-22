@@ -2,6 +2,7 @@ import numpy
 import math
 
 def normaVektor(vec):
+    # Mengembalikan norma vektor
     ret = 0.0
     for x in vec:
         ret += x * x
@@ -10,6 +11,8 @@ def normaVektor(vec):
 
 # sumber: https://www.youtube.com/watch?v=yyOXDSlY8d4
 def householder(matSrc):
+    # Mengembalikan Q dan R hasil QR decomposition
+    # Menggunakan householder triangularization
     mat = numpy.array(matSrc, dtype='double')
     R = numpy.copy(matSrc)
     Q = numpy.eye(len(matSrc))
