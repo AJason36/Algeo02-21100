@@ -8,8 +8,13 @@ import pickle
 
 def extract_features(imgPath, vector_size = 32):
     imgSize = 256
-    img = cv2.imread(imgPath)
-    img = cropImage(img)
+    imgInit = cv2.imread(imgPath)
+    img = cropImage(imgInit)
+
+    # Jika muka tidak dikenali, return list kosong
+    if len(img) <= 0:
+        return []
+
     img = cv2.resize(img, (imgSize, imgSize))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     try:

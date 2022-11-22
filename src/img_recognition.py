@@ -49,7 +49,10 @@ def imgRecognition(namaFile):
         eData = pickle.load(fp)
 
     # Mengambil EigenFace Gambar yang Dibandingkan
-    eFace = newEigenFace(eData, loadImage(namaFile))
+    img = loadImage(namaFile)
+    if len(img) == 0:
+        return "Tidak ada muka yang dikenali", False, ""
+    eFace = newEigenFace(eData, img)
 
     # Mencari Gambar dengan Euclidean Distance terkecil
     minED = -1
@@ -71,11 +74,11 @@ def imgRecognition(namaFile):
                     sim = np.dot(eFace, rhs) / ( normaVektor(eFace) * normaVektor(rhs) )
             # print(lhs, euclideanDistance(eFace, rhs))
 
-    EPS1 = 0.98
-    EPS2 = 0.90
-    if sim > EPS1:
-        return f"Mirip dengan {namaED}\n jarak = {round(minED,3)}\n kemiripan = {round(sim*100, 2)}%", True, namaED
-    elif sim > EPS2:
+    EPS1 = 6900
+    EPS2 = 9000
+    if minED < EPS1:
+        return f"Mirip dengan {namaED}\njarak = {round(minED,3)}\nkemiripan = {round(sim*100, 2)}%", True, namaED
+    elif minED < EPS2:
         return "Muka tidak dikenali pada dataset", False, namaED
     else:
         return "Gambar tidak dikenali", False, namaED
@@ -86,3 +89,6 @@ if __name__ == "__main__":
     print(imgRecognition("../test/example/Avriltest.webp"))
     print(imgRecognition("../test/example/EmmaTest2.jpg"))
     print(imgRecognition("../test/example/AlvaroTest.jpg"))
+    print(imgRecognition("../test/example/DogTest.jpg"))
+    print(imgRecognition("../test/example/PizzaTest.jpg"))
+
