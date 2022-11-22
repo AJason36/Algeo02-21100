@@ -9,7 +9,6 @@ def normaVektor(vec):
 
     return math.sqrt(ret)
 
-# sumber: https://www.youtube.com/watch?v=yyOXDSlY8d4
 def householder(matSrc):
     # Mengembalikan Q dan R hasil QR decomposition
     # Menggunakan householder triangularization
@@ -42,42 +41,6 @@ def householder(matSrc):
     for i in range(len(H_i)-1, -1, -1):
         Q[i:, i:] = H_i[i] @ Q[i:, i:]
     return Q, R
-
-
-# Householder lama
-
-# def householder(matSrc):
-#     # Householder naif
-#     # I.S. mat matriks persegi
-#     mat = numpy.array(matSrc)
-#     assert(len(mat) == len(mat[0]))
-
-#     Q = numpy.eye(len(mat))
-#     matT = numpy.transpose(mat)
-#     for i in range(len(mat) - 1):
-#         u = matT[i]
-#         for j in range(i):
-#             u[j] = 0
-#         if(mat[0][0] > 0):
-#             u[i] += normaVektor(u)
-#         else:
-#             u[i] -= normaVektor(u)
-#         norm = normaVektor(u)
-#         for j in range(len(u)):
-#             u[j] /= norm
-#         Hi = numpy.transpose([u]) @ [u]
-#         for j in range(len(Hi)):
-#             for k in range(len(Hi)):
-#                 Hi[j][k] *= -2
-#             Hi[j][j] += 1
-#         mat = Hi @ mat
-#         matT = numpy.transpose(mat)
-#         if i == 0:
-#             Q = Hi
-#         else:
-#             Q = Q @ Hi
-
-#     return Q, mat
 
 
 if __name__ == "__main__":
