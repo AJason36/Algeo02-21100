@@ -16,11 +16,17 @@
 - UI Design using Custom Tkinter
 - Face recognition image using hundreds of training image
 - Algorithm using QR Decomposition
+This repository contains files needed for Tugas Besar 2 IF2123 Geometric and Linear Algebra. 
+We made a face recognition using eigenface algorithm.
+The contributors of this project are:
+- 13521100 Alexander Jason
+- 13521114 Farhan Nabil Suryono
+- 13521137 Michael Utama
 
 ## Features
 List the ready features here:
 - Face Recognition
-- Test
+- Webcam
 
 
 ## Screenshots
@@ -33,20 +39,12 @@ run gui.py file
 `write-your-code-here`
 
 ## Room for Improvement
-
-
 Room for improvement:
 - Improvement to be done 1
 - Improvement to be done 2
 
-To do:
-- Feature to be added 1
-- Feature to be added 2
-
-
-## Acknowledgements
-- This project was inspired by 
-
+## Programming Language Used
+- Python
 
 ## Contact
 Created by [@Alexander Jason][@Michael Utama][@Farhan Nabil Suryono]
